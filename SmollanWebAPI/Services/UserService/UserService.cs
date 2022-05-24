@@ -40,10 +40,17 @@ namespace SmollanWebAPI.Services.UserService
         {
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.Email = user.Email;
+            user.Email = model.Email;
             user.Password = _encryptService.EncryptString(model.Password);
 
             _context.Users.Update(user);
+
+            _context.SaveChanges();
+        }
+
+        public void DeleteUser(User user)
+        {
+            _context.Users.Remove(user);
 
             _context.SaveChanges();
         }

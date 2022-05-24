@@ -9,5 +9,7 @@ namespace SmollanWebAPI.Services.UserService
         List<User> GetUsers();
         void CreateUser(UserRequestModel model);
         void UpdateUser(User user, UserRequestModel model);
+
+        void DeleteUser(User user);
     }
 }

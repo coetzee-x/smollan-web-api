@@ -82,5 +82,18 @@ namespace SmollanWebAPI.Controllers
             return Ok(new { message = "The user was updated successfully.", status = StatusCodes.Status200OK });
         }
 
+        [HttpDelete]
+        [Route("[controller]/{id:int}", Name = "DeleteUser")]
+        public IActionResult DeleteUser([FromRoute] int id)
+        {
+            var user = _userService.GetById(id);
+
+            if (user == null)
+                return NotFound(new { message = $"No user was found with id {id}."});
+
+            _userService.DeleteUser(user);
+
+            return Ok(new { message = "The user was deleted successfully.", status = StatusCodes.Status200OK });
+        }
     }
 }
