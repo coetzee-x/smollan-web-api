@@ -1,4 +1,5 @@
 using SmollanWebAPI.Context;
+using SmollanWebAPI.Services.EncryptService;
 using SmollanWebAPI.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+builder.Services.AddScoped(typeof(IEncryptService), typeof(EncryptService));
 
 var app = builder.Build();
 

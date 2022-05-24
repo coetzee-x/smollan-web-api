@@ -1,22 +1,55 @@
-﻿using SmollanWebAPI.Entities;
+﻿using SmollanWebAPI.Context;
+using SmollanWebAPI.Entities;
+using SmollanWebAPI.Models.Users;
+using SmollanWebAPI.Services.EncryptService;
 
 namespace SmollanWebAPI.Services.UserService
 {
     public class UserService : IUserService
     {
-        public bool CreateUser()
+        private DatabaseContext _context;
+
+        private IEncryptService _encryptService;
+
+        public UserService
+            (
+            DatabaseContext context,
+            IEncryptService encryptService
+            )
         {
-            throw new NotImplementedException();
+            _context = context;
+            _encryptService = encryptService;
         }
 
-        public User GetById(int id)
+        public void CreateUser(UserRequestModel model)
         {
-            throw new NotImplementedException();
+            var user = new User
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                Password = _encryptService.EncryptString(model.Password)
+            };
+
+            _context.Users.Add(user);
+
+            _context.SaveChanges();
         }
 
-        public IEnumerable<User> GetUsers()
+        public void UpdateUser(User user, UserRequestModel model)
         {
-            throw new NotImplementedException();
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = user.Email;
+            user.Password = _encryptService.EncryptString(model.Password);
+
+            _context.Users.Update(user);
+
+            _context.SaveChanges();
         }
+
+        public User GetById(int id) => _context.Users.FirstOrDefault(f => f.Id == id);
+
+        public List<User> GetUsers() => _context.Users.ToList();
     }
 }
