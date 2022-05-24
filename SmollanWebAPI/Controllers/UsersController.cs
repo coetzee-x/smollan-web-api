@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmollanWebAPI.Models.Users;
 using SmollanWebAPI.Services.UserService;
 
@@ -82,6 +83,7 @@ namespace SmollanWebAPI.Controllers
             return Ok(new { message = "The user was updated successfully.", status = StatusCodes.Status200OK });
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("[controller]/{id:int}", Name = "DeleteUser")]
         public IActionResult DeleteUser([FromRoute] int id)

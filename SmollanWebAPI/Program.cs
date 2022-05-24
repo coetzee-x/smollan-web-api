@@ -1,4 +1,5 @@
 using SmollanWebAPI.Context;
+using SmollanWebAPI.Middleware;
 using SmollanWebAPI.Services.EncryptService;
 using SmollanWebAPI.Services.UserService;
 
@@ -21,7 +22,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseMiddleware<AuthorizeMiddleware>();
 
 app.MapControllers();
 

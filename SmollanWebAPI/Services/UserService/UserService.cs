@@ -21,6 +21,15 @@ namespace SmollanWebAPI.Services.UserService
             _encryptService = encryptService;
         }
 
+        public User AuthorizeUser(string email, string password)
+        {
+            var encryptedPassword = _encryptService.EncryptString(password);
+
+            var user = _context.Users.FirstOrDefault(f => f.Email == email && f.Password == encryptedPassword);
+
+            return user;
+        }
+
         public void CreateUser(UserRequestModel model)
         {
             var user = new User
@@ -56,7 +65,6 @@ namespace SmollanWebAPI.Services.UserService
         }
 
         public User GetById(int id) => _context.Users.FirstOrDefault(f => f.Id == id);
-
         public List<User> GetUsers() => _context.Users.ToList();
     }
 }
