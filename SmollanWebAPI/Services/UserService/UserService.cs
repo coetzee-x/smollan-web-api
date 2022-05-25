@@ -1,4 +1,5 @@
-﻿using SmollanWebAPI.Context;
+﻿using Microsoft.Extensions.Caching.Memory;
+using SmollanWebAPI.Context;
 using SmollanWebAPI.Entities;
 using SmollanWebAPI.Models.Users;
 using SmollanWebAPI.Services.EncryptService;
@@ -10,15 +11,18 @@ namespace SmollanWebAPI.Services.UserService
         private DatabaseContext _context;
 
         private IEncryptService _encryptService;
+        private IMemoryCache _memoryCache;
 
         public UserService
             (
             DatabaseContext context,
-            IEncryptService encryptService
+            IEncryptService encryptService,
+            IMemoryCache memoryCache
             )
         {
             _context = context;
             _encryptService = encryptService;
+            _memoryCache = memoryCache;
         }
 
         public User AuthorizeUser(string email, string password)
@@ -64,7 +68,18 @@ namespace SmollanWebAPI.Services.UserService
             _context.SaveChanges();
         }
 
-        public User GetById(int id) => _context.Users.FirstOrDefault(f => f.Id == id);
+        public User GetById(int id)
+        {
+            if (!_memoryCache.TryGetValue($"user:{id}", out User user))
+            {
+                user = _context.Users.FirstOrDefault(f => f.Id == id);
+
+                if(user != null)
+                    _memoryCache.Set($"user:{id}", user);
+            }
+
+            return user;
+        }
         public List<User> GetUsers() => _context.Users.ToList();
     }
 }

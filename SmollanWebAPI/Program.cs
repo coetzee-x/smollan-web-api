@@ -13,16 +13,16 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 builder.Services.AddScoped(typeof(IEncryptService), typeof(EncryptService));
 
+builder.Services.AddMemoryCache();
+
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-}
+app.UseMiddleware<AuthorizeMiddleware>();
 
 app.UseHttpsRedirection();
 
-app.UseMiddleware<AuthorizeMiddleware>();
+app.UseAuthorization();
 
 app.MapControllers();
 
