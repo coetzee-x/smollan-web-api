@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace SmollanWebAPI.Attributes
 {
@@ -6,7 +7,8 @@ namespace SmollanWebAPI.Attributes
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            throw new NotImplementedException();
+            if (context.HttpContext.Items["User"] == null)
+                context.Result = new JsonResult(new { message = "Unauthorized", status = StatusCodes.Status401Unauthorized });
         }
     }
 }

@@ -56,8 +56,6 @@ namespace SmollanWebAPI.Services.UserService
             user.Email = model.Email;
             user.Password = _encryptService.EncryptString(model.Password);
 
-            _context.Users.Update(user);
-
             _context.SaveChanges();
         }
 

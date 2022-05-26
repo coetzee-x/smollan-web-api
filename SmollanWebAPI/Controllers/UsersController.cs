@@ -63,7 +63,7 @@ namespace SmollanWebAPI.Controllers
 
         [HttpPost]
         [Route("[controller]", Name = "CreateUser")]
-        public IActionResult CreateUser([FromBody] UserRequestModel model)
+        public IActionResult CreateUser(UserRequestModel model)
         {
             _userService.CreateUser(model);
 
